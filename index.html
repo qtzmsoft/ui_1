@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <!--
+    轻启 · 新标签页 —— 当前系统 UI 美化参考 Demo（静态）
+    来源：vue-chrome-ext-client/src/newtab/components/redesign/*（逐组件复刻）
+    用途：给美工在原结构 / 原字号 / 原层级上做美化；美化稿回交后再据此改代码。
+    注意：页面底部蓝色「演示」条不是系统 UI，只用于切换主题/壁纸/各浮层状态。
+  -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>轻启 · 新标签页视觉美化参考 Demo</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23356ff4'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+
+  <body class="rd-enabled rd-photo photo-tone-dark theme-photo">
+    <!-- 场景背景层（对应 HomeView 的 .rd-scene photo） -->
+    <div class="rd-scene photo" id="scene"></div>
+
+    <div class="home-shell" id="homeShell">
+      <!-- ============ 页头 AppHeader ============ -->
+      <header class="app-header">
+        <div class="header-left">
+          <div class="brand" aria-label="轻启新标签页">
+            <div class="brand-mark">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12a7 7 0 1 0 2-5" /><path d="M5 5v5h5" /><path d="M12 8v4l2.5 1.5" /></svg>
+            </div>
+            <div class="brand-name">轻<em>启</em></div>
+          </div>
+
+          <nav class="header-tabs" aria-label="主功能">
+            <button class="header-tab" type="button" data-pane="bookmarks">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.75 5.57 6.15.89-4.45 4.33 1.05 6.11L12 17l-5.5 2.9 1.05-6.11L3.1 9.46l6.15-.89z"/></svg>
+              收藏夹
+            </button>
+            <button class="header-tab" type="button" data-pane="history">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/></svg>
+              历史记录
+            </button>
+            <button class="header-tab" type="button" data-pane="toolbox">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5 5L3 18l3 3 6.7-6.7a4 4 0 0 0 5-5l-2.9 2.1-3.1-3.1z"/></svg>
+              工具箱
+            </button>
+            <button class="header-tab" type="button" data-pane="readlater">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a2 2 0 0 1 2 2v16l-8-4-8 4V5a2 2 0 0 1 2-2Z"/></svg>
+              稍后阅读
+            </button>
+
+            <div class="more-wrap">
+              <button class="header-tab more-tab" type="button" aria-label="更多功能" id="moreBtn">
+                <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.5" /><circle cx="12" cy="12" r="1.5" /><circle cx="19" cy="12" r="1.5" /></svg>
+              </button>
+              <div class="more-menu" id="moreMenu">
+                <button class="more-item" type="button">便签</button>
+                <button class="more-item" type="button">番茄钟</button>
+                <button class="more-item" type="button">扩展中心</button>
+              </div>
+            </div>
+          </nav>
+        </div>
+
+        <!-- 中部状态条：天气与日期是两个独立按钮（开发说明 §5.1 / §8） -->
+        <div class="header-center status-control" role="group" aria-label="天气和日期">
+          <button class="status-segment weather-segment" type="button" aria-label="查看天气和选择城市" id="weatherBtn">
+            <svg class="weather-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+            </svg>
+            <span class="weather-city-name">合肥</span>
+            <span class="weather-temp">18°</span>
+          </button>
+
+          <span class="status-divider" aria-hidden="true">·</span>
+
+          <button class="status-segment date-segment" type="button" aria-label="打开日历与任务" id="calendarBtn">
+            <span class="date-day">10 月 22 日</span>
+            <span class="date-week">周四</span>
+            <span class="header-task-badge" title="今日 2 项未完成任务">2</span>
+          </button>
+        </div>
+
+        <div class="header-actions">
+          <button class="account-btn" type="button" title="qingqi" aria-label="账号：qingqi" id="accountBtn">Q</button>
+          <button class="icon-btn" type="button" title="页面设置" aria-label="页面设置" id="settingsBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.13 2.13-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V20.3h-3v-.08a1.7 1.7 0 0 0-1.03-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06-2.13-2.13.06-.06A1.7 1.7 0 0 0 7 15a1.7 1.7 0 0 0-1.56-1.03h-.08v-3h.08A1.7 1.7 0 0 0 7 9.94a1.7 1.7 0 0 0-.34-1.88L6.6 8 8.73 5.87l.06.06a1.7 1.7 0 0 0 1.88.34 1.7 1.7 0 0 0 1.03-1.56v-.08h3v.08a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06L19.8 8l-.06.06a1.7 1.7 0 0 0-.34 1.88 1.7 1.7 0 0 0 1.56 1.03h.08v3h-.08A1.7 1.7 0 0 0 19.4 15Z" /></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- ============ 主区 ============ -->
+      <main class="home-main">
+        <!-- 欢迎区：秒级时钟 + 每日一言 -->
+        <section class="welcome">
+          <div class="current-time"><time id="clock">00:00:00</time></div>
+          <div class="eyebrow"><i></i><span>把每一个新标签页，过成舒服的起点。</span></div>
+        </section>
+
+        <!-- 搜索框 -->
+        <section class="search-wrap" aria-label="网页搜索">
+          <form class="searchbox" onsubmit="return false">
+            <div class="engine-anchor">
+              <button type="button" class="engine-button" id="engineBtn">
+                <span class="engine-logo" id="engineLogo" style="background: #3478f6">B</span>
+                <span class="engine-name" id="engineName">Bing</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6" /></svg>
+              </button>
+              <div class="engine-menu" id="engineMenu" role="menu"></div>
+            </div>
+            <span class="search-separator"></span>
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="6.5" /><path d="m16 16 4 4" /></svg>
+            <input class="search-input" autocomplete="off" placeholder="搜索任何内容，或输入网址" aria-label="搜索任何内容" />
+            <kbd class="key-hint" id="keyHint">⌘ K</kbd>
+            <button class="search-go" type="submit" title="搜索" aria-label="搜索">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13" /><path d="m13 6 6 6-6 6" /></svg>
+            </button>
+          </form>
+        </section>
+
+        <!-- 快捷访问（16/页轮播，编辑态可删除/排序；隐私项不进主网格） -->
+        <section class="quick-section" aria-label="快捷访问">
+          <div class="quick-head">
+            <div class="section-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 9.25 8.57 3.1 9.46l4.45 4.33-1.05 6.11L12 17l5.5 2.9-1.05-6.11 4.45-4.33-6.15-.89z"/></svg>
+              <span>快捷访问</span>
+            </div>
+            <span class="quick-note" id="quickNote"><i></i>拖拽排序 · 点击图标修改 · × 删除</span>
+            <div class="section-actions">
+              <div class="quick-pager">
+                <button class="pager-btn" type="button" aria-label="上一页" id="prevPage">‹</button>
+                <span class="pager-status" id="pagerStatus">1 / 1</span>
+                <button class="pager-btn" type="button" aria-label="下一页" id="nextPage">›</button>
+              </div>
+              <button class="manage-btn" type="button" id="manageBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+                <span id="manageBtnText">编辑</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="quick-viewport" id="quickViewport">
+            <div class="quick-grid" id="quickGrid"></div>
+          </div>
+        </section>
+      </main>
+
+      <!-- ============ 页脚 ============ -->
+      <footer class="page-footer">
+        <div class="tip" id="footerTip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M8.5 14.5A6.3 6.3 0 1 1 15.5 14c-.75.58-1.2 1.2-1.3 2H9.8c-.1-.8-.55-1.42-1.3-2Z" /></svg>
+          <span>按 <b>⌘ K</b> 即可随时呼出搜索</span>
+        </div>
+        <div class="tip-spacer" id="footerSpacer" style="display: none"></div>
+        <div class="bottom-actions">
+          <button class="plain-button" type="button">隐私快捷访问</button>
+          <i class="dot"></i>
+          <button class="plain-button" type="button" id="footerSettingsBtn">更换外观</button>
+        </div>
+      </footer>
+    </div>
+
+    <!-- ============ 天气浮层 ============ -->
+    <div class="top-popover weather-popover" id="weatherPopover" role="dialog" aria-label="天气与常用城市">
+      <div class="weather-popover-head">
+        <div class="weather-head-text">
+          <span class="popover-kicker">实时天气</span>
+          <b>合肥</b>
+        </div>
+        <button class="city-switch-label" type="button" id="cityAddToggle">＋ 添加城市</button>
+      </div>
+
+      <div class="weather-now">
+        <div class="weather-now-icon">⛅</div>
+        <div class="weather-now-main">
+          <strong>18°</strong>
+          <span>多云 · 体感 17°</span>
+        </div>
+        <div class="weather-extra">
+          <span>湿度 <b>63%</b></span>
+          <span>东北风 <b>3 级</b></span>
+        </div>
+      </div>
+
+      <div class="weather-forecast-label">未来四天</div>
+      <div class="weather-forecast-list">
+        <article class="forecast-day"><b>🌤</b><span>今天</span><small>21° / 14°</small></article>
+        <article class="forecast-day"><b>🌧</b><span>明天</span><small>19° / 13°</small></article>
+        <article class="forecast-day"><b>⛅</b><span>周六</span><small>22° / 15°</small></article>
+        <article class="forecast-day"><b>☀️</b><span>周日</span><small>25° / 16°</small></article>
+      </div>
+
+      <div class="city-picker">
+        <div class="city-picker-head">
+          <span>常用城市 (5/8)</span>
+          <button class="city-add-button" type="button">＋ 添加</button>
+        </div>
+        <div class="city-options">
+          <div class="city-chip active" role="button" tabindex="0">合肥 <button class="city-chip-remove" type="button">×</button></div>
+          <div class="city-chip" role="button" tabindex="0">北京 <button class="city-chip-remove" type="button">×</button></div>
+          <div class="city-chip" role="button" tabindex="0">上海 <button class="city-chip-remove" type="button">×</button></div>
+          <div class="city-chip" role="button" tabindex="0">深圳 <button class="city-chip-remove" type="button">×</button></div>
+          <div class="city-chip" role="button" tabindex="0">杭州 <button class="city-chip-remove" type="button">×</button></div>
+        </div>
+
+        <div class="city-add-list" id="cityAddList">
+          <span>模糊搜索城市，如「北」可匹配北京、北海、北屯、台北、新北</span>
+          <label class="city-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="6" /><path d="m16 16 4 4" /></svg>
+            <input autocomplete="off" placeholder="输入城市名（中文即可）" aria-label="搜索城市" />
+          </label>
+          <p class="city-search-meta">推荐城市 · 显示 6 个</p>
+          <div class="city-add-options">
+            <button type="button" disabled>✓ 合肥</button>
+            <button type="button">北京</button>
+            <button type="button">广州</button>
+            <button type="button">成都</button>
+            <button type="button">武汉</button>
+            <button type="button">南京</button>
+          </div>
+        </div>
+      </div>
+
+      <p class="weather-update">数据源 Open-Meteo · 刚刚更新</p>
+    </div>
+
+    <!-- ============ 日历与任务浮层 ============ -->
+    <div class="top-popover calendar-popover" id="calendarPopover" role="dialog" aria-label="日历与任务">
+      <button class="calendar-close" type="button" aria-label="关闭日历" id="calendarClose">×</button>
+      <div class="calendar-layout">
+        <div class="calendar-main">
+          <div class="calendar-head">
+            <button type="button" aria-label="上个月" id="prevMonth">‹</button>
+            <strong id="monthTitle">2026 年 10 月</strong>
+            <button type="button" aria-label="下个月" id="nextMonth">›</button>
+          </div>
+          <div class="calendar-weekdays">
+            <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+          </div>
+          <div class="calendar-days" id="calendarDays"></div>
+          <div class="calendar-foot">
+            <button type="button" id="backToday">回到今天</button>
+            <span>今天 · 10 月 22 日</span>
+          </div>
+        </div>
+
+        <aside class="calendar-agenda" aria-live="polite">
+          <div class="agenda-heading">
+            <span>所选日期</span>
+            <div class="agenda-date">
+              <strong id="agendaDate">10 月 22 日</strong>
+              <small id="agendaWeek">周四</small>
+            </div>
+            <button class="agenda-add-task" type="button" id="agendaAdd">＋ 添加任务</button>
+          </div>
+
+          <form class="agenda-task-editor" id="agendaEditor" onsubmit="return false">
+            <input type="time" value="09:00" aria-label="任务时间" />
+            <input maxlength="30" autocomplete="off" placeholder="任务内容" aria-label="任务内容" />
+            <select aria-label="任务类型">
+              <option value="work">工作</option>
+              <option value="meeting">会议</option>
+              <option value="personal">个人</option>
+            </select>
+            <div class="agenda-editor-actions">
+              <button class="agenda-editor-cancel" type="button" id="agendaCancel">取消</button>
+              <button class="agenda-editor-save" type="submit">添加任务</button>
+            </div>
+          </form>
+
+          <div class="agenda-list" id="agendaList">
+            <article class="agenda-task done">
+              <div class="agenda-task-time">
+                <button class="agenda-task-done done" type="button" aria-pressed="true" title="标记为未完成">✓</button>
+                <time>09:30</time>
+              </div>
+              <div class="agenda-task-body"><b>周会：新标签页改版进度</b><span>会议室 3F-05</span></div>
+              <button class="agenda-task-edit" type="button" title="修改任务">✎</button>
+            </article>
+            <article class="agenda-task meeting">
+              <div class="agenda-task-time">
+                <button class="agenda-task-done" type="button" aria-pressed="false" title="标记为已完成">✓</button>
+                <time>14:00</time>
+              </div>
+              <div class="agenda-task-body"><b>UI 美化稿评审</b><span>与设计同事对齐视觉口径</span></div>
+              <button class="agenda-task-edit" type="button" title="修改任务">✎</button>
+            </article>
+            <article class="agenda-task personal">
+              <div class="agenda-task-time">
+                <button class="agenda-task-done" type="button" aria-pressed="false" title="标记为已完成">✓</button>
+                <time>20:30</time>
+              </div>
+              <div class="agenda-task-body"><b>跑步 5 公里</b><span>个人</span></div>
+              <button class="agenda-task-edit" type="button" title="修改任务">✎</button>
+            </article>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- ============ 账号浮层 ============ -->
+    <div class="account-pop" id="accountPop" role="dialog" aria-label="账号与同步">
+      <div class="account-user">
+        <span class="account-large">Q</span>
+        <span class="account-user-text">
+          <b>qingqi</b>
+          <span>云端同步已开启</span>
+        </span>
+      </div>
+      <button class="popover-action" type="button">账号与数据设置 <span>›</span></button>
+      <button class="popover-action" type="button">立即同步 <span>↻</span></button>
+    </div>
+
+    <!-- ============ 侧边库（收藏夹 / 历史记录 / 工具箱 / 稍后阅读） ============ -->
+    <aside class="side-library" id="sideLibrary" aria-label="侧边工具面板">
+      <div class="resize-handle" title="拖拽调整宽度"></div>
+      <div class="library-top">
+        <div class="library-title">
+          <span class="library-title-mark" id="libraryMark"></span>
+          <span id="libraryTitle">收藏夹</span>
+        </div>
+        <button class="library-close" type="button" aria-label="关闭" id="libraryClose">×</button>
+      </div>
+      <div class="library-body">
+        <!-- 收藏夹 pane -->
+        <div class="library-pane-slot show" data-pane="bookmarks">
+          <div class="sync-to-local">
+            <span class="stl-tip">云端收藏尚未同步到本地</span>
+            <button class="stl-btn" type="button">同步到本地收藏夹</button>
+          </div>
+          <div class="sync-bar">
+            <span><b><i class="sync-dot"></i>云端收藏已同步</b></span>
+            <span>12 分钟前 · 共 46 项</span>
+          </div>
+          <div class="sync-toolbar">
+            <button class="tb-btn" type="button">↻ 刷新</button>
+            <button class="tb-btn" type="button">＋ 新建文件夹</button>
+            <button class="tb-btn" type="button">⭳ 导入</button>
+          </div>
+          <div class="tree">
+            <div class="tree-row folder"><span class="caret">▾</span><span class="node-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span><span class="node-title">常用站点</span><span class="count">12</span></div>
+            <div class="tree-children">
+              <div class="tree-row"><span class="caret"></span><span class="star">G</span><span class="node-title">GitHub · 代码托管</span></div>
+              <div class="tree-row"><span class="caret"></span><span class="star" style="background:#fb7299">B</span><span class="node-title">哔哩哔哩 · 精选视频</span></div>
+              <div class="tree-row"><span class="caret"></span><span class="star" style="background:#0084ff">知</span><span class="node-title">知乎 · 每日热点</span></div>
+            </div>
+            <div class="tree-row folder"><span class="caret">▾</span><span class="node-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span><span class="node-title">设计灵感</span><span class="count">9</span></div>
+            <div class="tree-children">
+              <div class="tree-row"><span class="caret"></span><span class="star" style="background:#000">B</span><span class="node-title">Behance · 视觉项目</span></div>
+              <div class="tree-row"><span class="caret"></span><span class="star" style="background:#e60023">P</span><span class="node-title">Pinterest · 灵感板</span></div>
+            </div>
+            <div class="tree-row folder"><span class="caret">▸</span><span class="node-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span><span class="node-title">开发文档</span><span class="count">18</span></div>
+            <div class="tree-row folder"><span class="caret">▸</span><span class="node-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span><span class="node-title">阅读清单</span><span class="count">7</span></div>
+          </div>
+        </div>
+
+        <!-- 历史记录 pane -->
+        <div class="library-pane-slot" data-pane="history">
+          <div class="hp-search">
+            <input class="hp-search-input" type="text" placeholder="统一搜索：历史 / 标签组 / 当前标签 / 最近关闭 / 快照" aria-label="统一搜索" />
+          </div>
+          <div class="hp-tabs">
+            <button class="hp-tab active" type="button">历史记录</button>
+            <button class="hp-tab" type="button">标签组</button>
+            <button class="hp-tab" type="button">当前标签</button>
+            <button class="hp-tab" type="button">最近关闭</button>
+            <button class="hp-tab" type="button">快照</button>
+          </div>
+          <div class="hist-group">
+            <div class="hist-day">今天 · 10 月 22 日</div>
+            <div class="hist-item"><span class="hist-fav" style="background:#356ff4">中</span><span class="hist-text"><span class="hist-title">中国知网 · 文献检索</span><span class="hist-meta">https://www.cnki.net · 14:32</span></span><span class="hist-star on">★</span></div>
+            <div class="hist-item"><span class="hist-fav" style="background:#000">G</span><span class="hist-text"><span class="hist-title">vuejs.org · Composition API</span><span class="hist-meta">https://vuejs.org · 11:05</span></span><span class="hist-star">☆</span></div>
+            <div class="hist-item"><span class="hist-fav" style="background:#ff6f37">搜</span><span class="hist-text"><span class="hist-title">设计规范配色对比度检查工具</span><span class="hist-meta">搜索结果页 · 10:47</span></span><span class="hist-star">☆</span></div>
+            <div class="hist-day">昨天 · 10 月 21 日</div>
+            <div class="hist-item"><span class="hist-fav" style="background:#2c9768">M</span><span class="hist-text"><span class="hist-title">MDN · backdrop-filter</span><span class="hist-meta">https://developer.mozilla.org · 21:18</span></span><span class="hist-star">☆</span></div>
+            <div class="hist-item"><span class="hist-fav" style="background:#bd8b31">B</span><span class="hist-text"><span class="hist-title">Behance · Dashboard UI</span><span class="hist-meta">https://www.behance.net · 19:02</span></span><span class="hist-star on">★</span></div>
+          </div>
+        </div>
+
+        <!-- 工具箱 pane -->
+        <div class="library-pane-slot" data-pane="toolbox">
+          <div class="toolbox-pane">
+            <div class="toolbox-search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="6" /><path d="m16 16 4 4" /></svg>
+              <input type="text" placeholder="搜索插件…" aria-label="搜索工具" />
+              <kbd>Alt+S</kbd>
+            </div>
+            <div class="tool-group-label">本地工具</div>
+            <button class="tool-entry" type="button"><span class="tool-icon local">🧾</span><span class="tool-text"><b>JSON 格式化</b><small>格式化 / 压缩 / 校验 JSON</small></span><span class="tool-go">›</span></button>
+            <button class="tool-entry" type="button"><span class="tool-icon local">📱</span><span class="tool-text"><b>二维码生成</b><small>文本转二维码图片</small></span><span class="tool-go">›</span></button>
+            <div class="tool-group-label">云端工具（需登录与权益）</div>
+            <button class="tool-entry" type="button"><span class="tool-icon cloud">🎬</span><span class="tool-text"><b>MP4 转 MP3</b><small>云端处理 · 需登录与权益</small></span><span class="tool-go">›</span></button>
+            <button class="tool-entry" type="button"><span class="tool-icon cloud">🔊</span><span class="tool-text"><b>音量放大</b><small>云端处理 · 需登录与权益</small></span><span class="tool-go">›</span></button>
+            <button class="tool-entry" type="button"><span class="tool-icon cloud">✂️</span><span class="tool-text"><b>MP3 剪辑</b><small>云端处理 · 需登录与权益</small></span><span class="tool-go">›</span></button>
+            <div class="toolbox-foot">本地工具离线可用 · 云端工具需登录与 media.process.active 权益</div>
+          </div>
+        </div>
+
+        <!-- 稍后阅读 pane（当前为占位设计） -->
+        <div class="library-pane-slot" data-pane="readlater">
+          <div class="readlater-pane">
+            <div class="rl-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a2 2 0 0 1 2 2v16l-8-4-8 4V5a2 2 0 0 1 2-2Z" /><path d="M9 8h6M9 12h4" /></svg>
+            </div>
+            <h3>稍后阅读</h3>
+            <p>把文章、视频存到这里，标注预计阅读时长，稍后静下心来慢慢看。</p>
+            <p class="rl-status">功能开发中 · 将随后续版本上线</p>
+            <span class="rl-tip">当前版本由「收藏夹 / 标签组」承接暂存需求</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ============ 设置抽屉 ============ -->
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+    <aside class="settings-drawer" id="settingsDrawer" role="dialog" aria-label="页面设置">
+      <div class="drawer-head">
+        <div class="drawer-head-text">
+          <h2>页面设置</h2>
+          <p class="settings-subtitle">个性化你的新标签页</p>
+        </div>
+        <button class="drawer-close" type="button" aria-label="关闭" id="drawerClose">×</button>
+      </div>
+
+      <div class="drawer-body">
+        <section class="setting-block">
+          <h3>外观模式</h3>
+          <p class="setting-kicker">默认跟随系统浅色 / 深色，也可手动固定为浅色或深色。</p>
+          <div class="theme-toggle" role="group" aria-label="外观主题">
+            <button type="button" id="modeAuto">🖥<span>跟随系统</span></button>
+            <button type="button" class="active" id="modeLight">☀<span>浅色</span></button>
+            <button type="button" id="modeDark">🌙<span>深色</span></button>
+          </div>
+        </section>
+
+        <section class="setting-block">
+          <h3>壁纸设置</h3>
+          <p class="setting-kicker">可从云端精选库、预设色彩或本地图片中选择，图片会自动叠加可读性蒙层。</p>
+          <div class="wallpaper-preview" id="wpPreview"><span class="preview-hint" id="wpHint">图片壁纸 · 自动明暗蒙层</span></div>
+          <div class="wallpaper-actions">
+            <label class="upload-wallpaper">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5M5 20h14" /></svg>
+              上传本地图片
+              <input type="file" accept="image/*" />
+            </label>
+            <button class="reset-wallpaper" type="button">恢复默认</button>
+          </div>
+          <nav class="wallpaper-tabs">
+            <button class="wallpaper-tab active" type="button" id="wpTabRemote">云端精选</button>
+            <button class="wallpaper-tab" type="button" id="wpTabPreset">颜色预设</button>
+          </nav>
+          <div class="wallpaper-pane show" id="wpPaneRemote">
+            <div class="remote-library-head">
+              <span>远程壁纸库 <b class="remote-count">共 128 张</b></span>
+              <button class="remote-refresh" type="button">↻ 刷新</button>
+            </div>
+            <div class="remote-grid">
+              <button class="remote-wallpaper selected" type="button" data-thumb="assets/thumb-1.webp" title="云端壁纸"></button>
+              <button class="remote-wallpaper" type="button" data-thumb="assets/thumb-2.webp" title="云端壁纸"></button>
+              <button class="remote-wallpaper" type="button" data-thumb="assets/wallpaper.webp" title="云端壁纸"></button>
+              <button class="remote-wallpaper" type="button" style="background-image:linear-gradient(135deg,#101a2e,#3b2a5a,#f4a261)" title="云端壁纸"></button>
+              <button class="remote-wallpaper" type="button" style="background-image:linear-gradient(135deg,#d8f1e9,#c8e4ec 50%,#eef4cf)" title="云端壁纸"></button>
+              <button class="remote-wallpaper" type="button" style="background-image:linear-gradient(135deg,#48557b,#86a8e7,#f9efe3)" title="云端壁纸"></button>
+            </div>
+            <button class="remote-load-more" type="button">加载更多（打开壁纸库）</button>
+          </div>
+          <div class="wallpaper-pane" id="wpPanePreset">
+            <p class="theme-label">背景预设</p>
+            <div class="theme-swatches">
+              <button class="swatch selected" type="button" title="晨雾渐变" style="background:linear-gradient(135deg,#ebf5ff,#dce9ff 55%,#f7e7d6)"></button>
+              <button class="swatch" type="button" title="暮色" style="background:linear-gradient(135deg,#263b68,#536fa8 48%,#e6a988)"></button>
+              <button class="swatch" type="button" title="薄荷" style="background:linear-gradient(135deg,#d8f1e9,#c8e4ec 50%,#eef4cf)"></button>
+              <button class="swatch" type="button" title="深夜" style="background:linear-gradient(135deg,#17243e,#253c62 50%,#3d577a)"></button>
+            </div>
+          </div>
+        </section>
+
+        <section class="setting-block">
+          <h3>浏览与显示</h3>
+          <div class="control-row">
+            <span class="control-label">链接打开方式</span>
+            <select class="open-mode-select" aria-label="链接打开方式">
+              <option value="self">当前标签页</option>
+              <option value="blank" selected>新标签页</option>
+              <option value="window">新窗口</option>
+            </select>
+          </div>
+          <div class="control-row">
+            <span class="control-label">显示天气与日期</span>
+            <button class="rd-switch on" type="button" role="switch" aria-checked="true" id="switchWeather"><i></i></button>
+          </div>
+          <div class="control-row">
+            <span class="control-label">显示快捷键提示</span>
+            <button class="rd-switch on" type="button" role="switch" aria-checked="true" id="switchHint"><i></i></button>
+          </div>
+        </section>
+
+        <section class="setting-block">
+          <h3>数据与账号</h3>
+          <div class="account-card">
+            <span class="ac-avatar">Q</span>
+            <span class="ac-text">
+              <b>qingqi</b>
+              <span>云端同步已开启 · 数据加密存储</span>
+            </span>
+            <span class="ac-badge">专业版</span>
+          </div>
+          <div class="account-actions">
+            <button class="mini-btn" type="button">修改用户名</button>
+            <button class="mini-btn" type="button">升级账号</button>
+            <button class="mini-btn" type="button">退出登录</button>
+            <button class="mini-btn danger" type="button">删除我的数据</button>
+          </div>
+          <div class="device-row">
+            <span>💻</span><span>DESKTOP-QINGQI · Chrome 130</span><span class="dev-current">当前设备</span>
+          </div>
+          <div class="device-row">
+            <span>💻</span><span>WORK-LAPTOP · Chrome 129</span><span>3 天前</span>
+          </div>
+        </section>
+      </div>
+    </aside>
+
+    <!-- ============ 演示条（非系统 UI：仅切换状态给美工查看） ============ -->
+    <div class="demo-bar" id="demoBar">
+      <span class="demo-tag">演示 · 非系统 UI</span>
+      <button type="button" data-demo="scene-photo" class="active">图片壁纸</button>
+      <button type="button" data-demo="scene-default">晨雾渐变</button>
+      <button type="button" data-demo="scene-dusk">暮色</button>
+      <button type="button" data-demo="scene-mint">薄荷</button>
+      <button type="button" data-demo="scene-night">深夜</button>
+      <span class="demo-sep"></span>
+      <button type="button" data-demo="dark">深色外观</button>
+      <span class="demo-sep"></span>
+      <button type="button" data-demo="pane-bookmarks">侧库·收藏夹</button>
+      <button type="button" data-demo="pane-history">侧库·历史</button>
+      <button type="button" data-demo="pane-toolbox">侧库·工具箱</button>
+      <button type="button" data-demo="pane-readlater">侧库·稍后阅读</button>
+      <span class="demo-sep"></span>
+      <button type="button" data-demo="pop-weather">天气浮层</button>
+      <button type="button" data-demo="pop-calendar">日历浮层</button>
+      <button type="button" data-demo="pop-account">账号浮层</button>
+      <button type="button" data-demo="pop-engine">引擎菜单</button>
+      <button type="button" data-demo="drawer">设置抽屉</button>
+      <button type="button" data-demo="edit">快捷访问编辑态</button>
+    </div>
+
+    <script src="assets/app.js"></script>
+  </body>
+</html>
