@@ -314,10 +314,16 @@ body.rd-enabled {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-body.rd-enabled button,
-body.rd-enabled input,
-body.rd-enabled select {
-  font: inherit;
+/* 控件字体：:where() 权重为 0，只做「兜底默认值」，任何组件自己的 .class 规则都能覆盖。
+   旧写法 body.rd-enabled button { font: inherit } 权重 (0,1,1) 高于 .theme-toggle button (0,1,1) 之后
+   仍会把组件声明的字号/行高整体重置，导致按钮、输入框、下拉框统一被拉回 16px，
+   进而出现「添加」按钮变形、外观按钮换行、筛选按钮撑破侧栏等问题。 */
+:where(body.rd-enabled) :where(button, input, select, textarea) {
+  font-family: inherit;
+  font-size: 13px;
+}
+:where(body.rd-enabled) :where(button) {
+  font-weight: 500;
 }
 
 .home-shell {
@@ -872,6 +878,7 @@ html.dark .header-tab.active {
   cursor: pointer;
   color: var(--ink);
   background: transparent;
+  font-size: 13.5px;
   font-weight: 600;
   transition: background 0.16s ease, color 0.16s ease;
 }
@@ -989,6 +996,27 @@ html.dark .header-tab.active {
 }
 .search-input::placeholder {
   color: var(--placeholder);
+}
+.search-clear {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  margin-right: 2px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  color: var(--ink-muted);
+  background: var(--control-bg);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.search-clear:hover {
+  color: #ffffff;
+  background: var(--blue);
 }
 .key-hint {
   flex: none;
@@ -1111,6 +1139,82 @@ html.dark .header-tab.active {
   border: 1px solid var(--scene-pill-border);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+}
+
+/* 添加常用网站按钮（与工具栏同高、随壁纸明暗自适应的小号胶囊） */
+.add-quick-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 26px;
+  padding: 0 11px 0 9px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: var(--blue);
+  background: var(--blue-soft);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.add-quick-btn svg {
+  width: 12px;
+  height: 12px;
+  flex: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+}
+.add-quick-btn:hover {
+  color: #ffffff;
+  border-color: transparent;
+  background: var(--blue);
+  box-shadow: 0 3px 10px var(--accent-blue-shadow);
+}
+.add-quick-btn:active {
+  transform: translateY(0.5px);
+}
+/* 深色场景（深壁纸 / 深色预设 / 深色外观）下提亮描边与文字，避免糊在背景里 */
+body.photo-tone-dark .add-quick-btn,
+body.theme-dusk .add-quick-btn,
+body.theme-night .add-quick-btn,
+html.dark body .add-quick-btn {
+  color: #93b6ff;
+  background: rgba(24, 40, 74, 0.55);
+  box-shadow: inset 0 0 0 1px rgba(147, 182, 255, 0.32);
+}
+body.photo-tone-dark .add-quick-btn:hover,
+body.theme-dusk .add-quick-btn:hover,
+body.theme-night .add-quick-btn:hover,
+html.dark body .add-quick-btn:hover {
+  color: #ffffff;
+  background: var(--blue);
+  box-shadow: 0 3px 10px var(--accent-blue-shadow);
+}
+/* 卡片态落在浅色毛玻璃面板上，直接用面板令牌 */
+.quick-section.mode-card .add-quick-btn {
+  color: var(--blue);
+  border-color: transparent;
+  background: var(--blue-soft);
+}
+.quick-section.mode-card .add-quick-btn:hover {
+  color: #ffffff;
+  background: var(--blue);
+}
+html.dark .quick-section.mode-card .add-quick-btn {
+  color: #a9c6ff;
+  background: rgba(76, 134, 255, 0.22);
+}
+
+/* 添加按钮与视图切换之间的细分隔线 */
+.add-quick-btn + .view-mode-switch {
+  padding-left: 6px;
+  border-left: 1px solid var(--scene-pill-border);
+}
+.quick-section.mode-card .add-quick-btn + .view-mode-switch {
+  border-left-color: var(--control-border);
 }
 
 /* 宫格 / 卡片 视图切换器 */
@@ -1510,6 +1614,22 @@ html.dark .header-tab.active {
 }
 .quick-section.mode-card .quick-dot {
   background: var(--blue);
+}
+
+/* 窄屏：工具栏允许换行，"添加"按钮不再被标题挤压变形 */
+@media (max-width: 640px) {
+  .quick-head {
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+  body .quick-note,
+  body .quick-note.show {
+    display: none;
+  }
+  .section-actions {
+    max-width: 100%;
+    overflow: hidden;
+  }
 }
 
 @media (max-width: 760px) {
@@ -2240,6 +2360,20 @@ html.dark .header-tab.active {
   background: var(--field-bg);
   font-size: 12.5px;
 }
+.agenda-task-editor select {
+  padding-right: 24px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%237f8fa6' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 4.75 6 7.75l3-3'/%3E%3C/svg%3E");
+  background-position: right 8px center;
+  background-repeat: no-repeat;
+  background-size: 12px 12px;
+  text-overflow: ellipsis;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+html.dark .agenda-task-editor select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%239fb0ca' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 4.75 6 7.75l3-3'/%3E%3C/svg%3E");
+}
 .agenda-task-editor input:focus,
 .agenda-task-editor select:focus {
   border-color: var(--blue);
@@ -2709,6 +2843,9 @@ html.dark .header-tab.active {
   width: 12.5px;
   height: 12.5px;
   flex: none;
+}
+.sync-toolbar .tb-upload-label {
+  cursor: pointer;
 }
 .sync-toolbar .tb-btn:hover {
   color: var(--blue);
@@ -3218,7 +3355,7 @@ html.dark .header-tab.active {
 
 .theme-toggle {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 4px;
   padding: 4px;
   background: var(--control-bg);
@@ -3229,17 +3366,26 @@ html.dark .header-tab.active {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+  gap: 4px;
+  min-width: 0;
   height: 32px;
   border: 0;
   background: transparent;
   color: var(--ink-muted);
   font-size: 12px;
   font-weight: 600;
-  padding: 0 8px;
+  line-height: 1;
+  padding: 0 6px;
   border-radius: 9px;
+  white-space: nowrap;
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
+}
+.theme-toggle button span {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .theme-toggle button svg {
   width: 14px;
@@ -3290,6 +3436,41 @@ html.dark .wallpaper-preview.preset {
   background: rgba(12, 20, 38, 0.72);
   backdrop-filter: blur(8px);
   font-size: 10.5px;
+}
+
+/* 壁纸模糊度 / 遮罩浓度滑杆 */
+.wp-sliders {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.slider-row {
+  display: grid;
+  gap: 6px;
+}
+.slider-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--ink-muted);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.slider-head b {
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.slider-row input[type="range"] {
+  width: 100%;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--blue);
+  cursor: pointer;
 }
 
 .wallpaper-actions {
@@ -3416,18 +3597,42 @@ html.dark .wallpaper-preview.preset {
 }
 .remote-load-more {
   width: 100%;
-  margin-top: 9px;
-  height: 32px;
-  border: 1px dashed var(--control-border);
+  margin-top: 10px;
+  height: 34px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid var(--control-border);
   border-radius: 10px;
   color: var(--ink-muted);
-  background: transparent;
+  background: var(--control-bg);
   font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+.remote-load-more svg {
+  width: 13px;
+  height: 13px;
+  flex: none;
+  stroke: currentColor;
+}
+.remote-load-more span {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .remote-load-more:hover {
   color: var(--blue);
   border-color: var(--blue);
+  background: var(--blue-soft);
 }
 
 .theme-label {
@@ -3473,16 +3678,48 @@ html.dark .wallpaper-preview.preset {
   font-weight: 500;
   white-space: nowrap;
 }
+
+/* ---- 统一的高定下拉框：去掉系统原生外观，改用内联 SVG 箭头 ---- */
 .open-mode-select {
-  max-width: 196px;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 190px;
   height: 32px;
-  padding: 0 8px;
+  padding: 0 26px 0 11px;
   border: 1px solid var(--control-border);
-  border-radius: 9px;
+  border-radius: 999px;
   color: var(--ink);
-  background: var(--field-bg);
+  background-color: var(--field-bg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%237f8fa6' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 4.75 6 7.75l3-3'/%3E%3C/svg%3E");
+  background-position: right 9px center;
+  background-repeat: no-repeat;
+  background-size: 12px 12px;
   font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  appearance: none;
+  -webkit-appearance: none;
   outline: none;
+  cursor: pointer;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease;
+}
+.open-mode-select:hover {
+  border-color: var(--blue);
+  background-color: var(--blue-soft);
+}
+.open-mode-select:focus,
+.open-mode-select:focus-visible {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px var(--blue-soft);
+}
+.open-mode-select option {
+  color: var(--ink);
+  background: var(--panel-strong);
+}
+html.dark .open-mode-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%239fb0ca' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 4.75 6 7.75l3-3'/%3E%3C/svg%3E");
 }
 
 .rd-switch {
@@ -3933,13 +4170,21 @@ body.theme-photo .rd-scene::after {
   box-shadow: 0 0 0 3.5px var(--blue-soft);
 }
 .rd-select {
-  appearance: none;
-  background-image: linear-gradient(45deg, transparent 50%, var(--ink-faint) 50%), linear-gradient(135deg, var(--ink-faint) 50%, transparent 50%);
-  background-position: calc(100% - 18px) 51%, calc(100% - 13px) 51%;
-  background-size: 5px 5px, 5px 5px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%237f8fa6' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 4.75 6 7.75l3-3'/%3E%3C/svg%3E");
+  background-position: right 14px center;
   background-repeat: no-repeat;
-  padding-right: 34px;
+  background-size: 13px 13px;
+  padding-right: 38px;
+  text-overflow: ellipsis;
+  appearance: none;
+  -webkit-appearance: none;
   cursor: pointer;
+}
+html.dark .rd-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%239fb0ca' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 4.75 6 7.75l3-3'/%3E%3C/svg%3E");
+}
+.rd-select:hover {
+  border-color: var(--blue);
 }
 
 /* ---------------- 通用毛玻璃模态框 ---------------- */
@@ -4570,8 +4815,35 @@ body.theme-photo .rd-scene::after {
   padding: 5px 12px;
   border-radius: 999px;
 }
+/* 稍后阅读工具栏按钮：原来没有样式，会被浏览器渲染成带 2px 凸起边框的系统按钮并把侧栏撑破 */
 .rl-add-btn {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 26px;
+  padding: 0 11px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: var(--blue);
+  background: var(--blue-soft);
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1;
   white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+.rl-add-btn:hover {
+  color: #ffffff;
+  border-color: transparent;
+  background: var(--blue);
+}
+.rl-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 .rl-item {
   display: flex;
@@ -5597,8 +5869,11 @@ html.dark .gallery-card,
 html.dark .private-block {
   background: rgba(255, 255, 255, 0.05);
 }
+/* 深色外观下选中项沿用品牌蓝，避免「面板色压面板色」导致看不出当前项 */
 html.dark .theme-toggle button.active {
-  background: var(--panel-strong);
+  color: #ffffff;
+  background: var(--blue);
+  box-shadow: 0 2px 10px rgba(76, 134, 255, 0.34);
 }
 html.dark .field-label {
   color: var(--ink-muted);

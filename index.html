@@ -242,7 +242,12 @@
             </div>
             <span class="quick-note" id="quickNote"><i></i>按住图标拖拽排序 · 点击图标编辑 · × 移除</span>
             <div class="section-actions">
-              <button class="add-quick-btn" type="button" id="topAddSiteBtn" title="添加自定义常用网站">＋ 添加</button>
+              <button class="add-quick-btn" type="button" id="topAddSiteBtn" title="添加自定义常用网站">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+                  <path d="M12 5.5v13M5.5 12h13" />
+                </svg>
+                <span>添加</span>
+              </button>
               <div class="view-mode-switch" role="group" aria-label="布局视图">
                 <button class="view-mode-btn active" type="button" data-view="icon" title="App 图标宫格（8×2）">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -705,7 +710,14 @@
               <button class="remote-wallpaper" type="button" data-wp="assets/wp-snow.jpg" title="梅里星河"></button>
               <button class="remote-wallpaper" type="button" data-scene-preset="scene-dusk" style="background-image: linear-gradient(135deg, #1d3564, #4d6fa9 52%, #e8a882)" title="暮色流光"></button>
             </div>
-            <button class="remote-load-more" type="button" id="openWpGalleryBtn">打开精选壁纸画廊（11 款高清壁纸与渐变）</button>
+            <button class="remote-load-more" type="button" id="openWpGalleryBtn" title="打开精选壁纸画廊（11 款高清壁纸与渐变）">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="16" rx="2.5" />
+                <path d="m6.5 15 3.4-3.6 2.6 2.7 2.2-2.2 2.8 3.1" />
+                <circle cx="9" cy="9" r="1.3" />
+              </svg>
+              <span>打开精选壁纸画廊 · 11 款</span>
+            </button>
           </div>
           <div class="wallpaper-pane" id="wpPanePreset">
             <p class="theme-label">四款东方气韵流体渐变色板</p>
@@ -723,8 +735,8 @@
           <div class="control-row">
             <span class="control-label">快捷访问图标样式</span>
             <select class="open-mode-select" id="drawerLayoutSelect" aria-label="快捷访问图标样式">
-              <option value="icon" selected>App 图标宫格（8列）</option>
-              <option value="card">灵动胶囊卡片（4列）</option>
+              <option value="icon" selected>图标宫格 · 8 列</option>
+              <option value="card">胶囊卡片 · 4 列</option>
             </select>
           </div>
           <div class="control-row">
